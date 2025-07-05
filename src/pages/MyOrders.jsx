@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import CrazyBackButton from '../components/CrazyBackBtn';
 
+const API_BASE = import.meta.env.VITE_API_BASE;
 const steps = ['Placed', 'Shipped', 'Out for Delivery', 'Delivered'];
 
 const MyOrders = () => {
@@ -17,7 +18,7 @@ const MyOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/api/orders/my-orders', {
+        const { data } = await axios.get(`${API_BASE}/orders/my-orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(data);
@@ -33,7 +34,7 @@ const MyOrders = () => {
 
   const handleCancel = async (orderId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/orders/${orderId}`, {
+      await axios.delete(`${API_BASE}/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders((prev) => prev.filter((o) => o._id !== orderId));
@@ -59,7 +60,7 @@ const MyOrders = () => {
 
   const handleDownloadInvoice = async (orderId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/orders/invoice/${orderId}`, {
+      const response = await axios.get(`${API_BASE}/orders/invoice/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob',
       });

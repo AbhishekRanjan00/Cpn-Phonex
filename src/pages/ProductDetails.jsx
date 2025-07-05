@@ -5,6 +5,8 @@ import { useCart } from '../context/CartContext';
 import { FaArrowLeft } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -13,7 +15,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/products/${id}`)
+      .get(`${API_BASE}/products/${id}`)
       .then((res) => setProduct(res.data))
       .catch((err) => console.error('Failed to fetch product:', err));
   }, [id]);

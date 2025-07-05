@@ -7,6 +7,8 @@ import ProductCard from "../components/ProductCard";
 import CrazyLoader from "../components/CrazyLoader";
 import CustomProductCard from "../components/CustomProductCard"; // ✅
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const categories = ["All", "Fruits", "Vegetables", "Dairy", "Snacks", "Beverages"];
 
 const Home = () => {
@@ -18,7 +20,7 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/products");
+      const res = await fetch(`${API_BASE}/products`);
       const data = await res.json();
       setProducts(data);
       setFilteredProducts(data);

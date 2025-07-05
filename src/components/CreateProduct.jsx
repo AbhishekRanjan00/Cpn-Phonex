@@ -3,6 +3,9 @@ import axios from 'axios';
 import { FiUploadCloud } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+const API_BASE = import.meta.env.VITE_API_BASE;
+
+
 
 const CreateProduct = () => {
   const navigate = useNavigate();
@@ -33,12 +36,13 @@ const CreateProduct = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/products', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(`${API_BASE}/api/products`, formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+    Authorization: `Bearer ${token}`,
+  },
+});
+
 
       alert('✅ Product created successfully!');
       setProduct({ name: '', price: '', description: '', stock: '', image: null });

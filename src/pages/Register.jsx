@@ -5,6 +5,8 @@ import { FiUserPlus } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const Register = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3000/api/users/register', formData);
+      const res = await axios.post(`${API_BASE}/users/register`, formData);
 
       const { token, user } = res.data;
 

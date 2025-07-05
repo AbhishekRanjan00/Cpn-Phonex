@@ -14,36 +14,37 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
- const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  try {
-    const res = await axios.post("http://localhost:3000/api/contact", form);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    if (res.data.success) {
-      toast.success("📬 Message sent to admin successfully!");
-      setForm({ name: "", email: "", message: "" });
-    } else {
-      toast.error("⚠️ Failed to send message");
+    try {
+      const res = await axios.post(`${API_BASE}/contact`, form);
+
+      if (res.data.success) {
+        toast.success("📬 Message sent to admin successfully!");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        toast.error("⚠️ Failed to send message");
+      }
+    } catch (err) {
+      console.error("❌ Error sending contact message:", err);
+      toast.error("❌ Something went wrong!");
     }
-  } catch (err) {
-    console.error("❌ Error sending contact message:", err);
-    toast.error("❌ Something went wrong!");
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-white py-16 px-4 sm:px-6 md:px-10 lg:px-20 relative">
-      {/* Back Button */}
       <Link to="/" className="absolute top-4 left-4 text-teal-600 hover:text-teal-800 text-xl">
         <FaArrowLeft />
       </Link>
 
-      {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -56,9 +57,7 @@ const Contact = () => {
         Have questions or feedback? Reach out to us below.
       </p>
 
-      {/* Contact Info + Form */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-6xl mx-auto">
-        {/* Contact Info */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -78,7 +77,6 @@ const Contact = () => {
             <span className="text-gray-700">chatra more chouparan near KBSS+ High School</span>
           </div>
 
-          {/* Social Icons */}
           <div className="flex gap-4 mt-6">
             <a href="https://t.me/cpnphonex" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 text-2xl">
               <FaTelegramPlane />
@@ -95,7 +93,6 @@ const Contact = () => {
           </div>
         </motion.div>
 
-        {/* Contact Form */}
         <motion.form
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -139,7 +136,6 @@ const Contact = () => {
         </motion.form>
       </div>
 
-      {/* Footer Section */}
       <div className="mt-16 text-center text-sm text-gray-500 space-y-2">
         <div className="flex flex-wrap justify-center gap-4 text-teal-600">
           <span className="hover:underline cursor-pointer">Privacy Policy</span>

@@ -10,13 +10,17 @@ import {
 } from "react-icons/md";
 import CrazyBackButton from "../components/CrazyBackBtn";
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
+
+
 const AdminOrders = () => {
   const { auth } = useAuth();
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/orders/all", {
+      const res = await axios.get(`${API_BASE}/orders/all`, {
         headers: { Authorization: `Bearer ${auth?.token}` },
       });
       setOrders(res.data);
@@ -28,7 +32,7 @@ const AdminOrders = () => {
   const updateStatus = async (id, status) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/orders/status/${id}`,
+        `${API_BASE}/orders/status/${id}`,
         { status },
         { headers: { Authorization: `Bearer ${auth?.token}` } }
       );

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import CrazyLoader from "../components/CrazyLoader";
 import toast from "react-hot-toast";
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const Payment = () => {
   const { cartItems, clearCart } = useCart();
   const { auth } = useAuth();
@@ -45,7 +47,7 @@ const Payment = () => {
       setLoading(true);
 
       const { data: order } = await axios.post(
-        "http://cpn-phonex-backend.onrender.com/api/payment/create-order",
+        `${API_BASE}/payment/create-order`,
         { amount: totalAmount }
       );
 
@@ -72,7 +74,7 @@ const Payment = () => {
             },
           };
 
-          const { data } = await axios.post("/api/orders/place", payload, {
+          const { data } = await axios.post(`${API_BASE}/orders/place`, payload, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
