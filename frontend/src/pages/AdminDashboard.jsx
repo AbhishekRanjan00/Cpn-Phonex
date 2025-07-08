@@ -17,6 +17,7 @@ import {
 import { toast } from "react-hot-toast";
 import { FaUser, FaUserShield } from "react-icons/fa";
 
+const API_BASE = import.meta.env.VITE_API_BASE;
 const COLORS = ["#38b2ac", "#90cdf4"];
 
 const AdminDashboard = () => {
@@ -31,41 +32,41 @@ const AdminDashboard = () => {
   const [orderStats, setOrderStats] = useState({ totalOrders: 0 });
 
   const fetchAllData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const headers = { Authorization: `Bearer ${token}` };
+  try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
 
-      const [userRes, salesRes, orderRes] = await Promise.all([
-        axios.get("http://localhost:3000/api/admin/users", { headers }),
-        axios.get("http://localhost:3000/api/admin/sales", { headers }),
-        axios.get("http://localhost:3000/api/admin/orders", { headers }),
-      ]);
+    const [userRes, salesRes, orderRes] = await Promise.all([
+      axios.get(`${API_BASE}/admin/users`, { headers }),
+      axios.get(`${API_BASE}/admin/sales`, { headers }),
+      axios.get(`${API_BASE}/admin/orders`, { headers }),
+    ]);
 
-      setUsers(userRes.data);
-      setSalesData(salesRes.data.monthlySales || []);
-      setTotalSales(salesRes.data.totalSales || 0);
+    setUsers(userRes.data);
+    setSalesData(salesRes.data.monthlySales || []);
+    setTotalSales(salesRes.data.totalSales || 0);
+    setOrderStats(orderRes.data);
 
-      setUserStats(
-        userRes.data.reduce(
-          (acc, user) => {
-            acc[user.role === "admin" ? "admins" : "users"]++;
-            return acc;
-          },
-          { admins: 0, users: 0 }
-        )
-      );
-
-      setOrderStats(orderRes.data);
-    } catch (err) {
-      toast.error("Error loading dashboard");
-    }
-  };
+    setUserStats(
+      userRes.data.reduce(
+        (acc, user) => {
+          acc[user.role === "admin" ? "admins" : "users"]++;
+          return acc;
+        },
+        { admins: 0, users: 0 }
+      )
+    );
+  } catch (err) {
+    toast.error("Error loading dashboard");
+  }
+};
+  
 
   const toggleRole = async (id, currentRole) => {
     const newRole = currentRole === "admin" ? "user" : "admin";
     try {
       await axios.put(
-        `http://localhost:3000/api/admin/toggle-role/${id}`,
+        `${API_BASE}/admin/toggle-role/${id}`,
         { role: newRole },
         {
           headers: {

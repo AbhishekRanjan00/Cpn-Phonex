@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import CrazyLoader from "../components/CrazyLoader";
 import toast from "react-hot-toast";
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const Payment = () => {
   const { cartItems, clearCart } = useCart();
   const { auth } = useAuth();
@@ -45,7 +47,7 @@ const Payment = () => {
       setLoading(true);
 
       const { data: order } = await axios.post(
-        "http://localhost:3000/api/payment/create-order",
+        `${API_BASE}/payment/create-order`,
         { amount: totalAmount }
       );
 
@@ -72,7 +74,7 @@ const Payment = () => {
             },
           };
 
-          const { data } = await axios.post("/api/orders/place", payload, {
+          const { data } = await axios.post(`${API_BASE}/orders/place`, payload, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -106,15 +108,15 @@ const Payment = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 sm:px-6">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 py-8">
       {loading ? (
         <CrazyLoader />
       ) : (
-        <div className="bg-white w-full max-w-md p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-200">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 text-center">
+        <div className="bg-white w-full max-w-md md:max-w-lg lg:max-w-xl p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-200 transition-all duration-300">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-4">
             Confirm Payment
           </h2>
-          <p className="text-center text-base sm:text-lg mb-6 text-gray-700">
+          <p className="text-center text-base md:text-lg text-gray-600 mb-6">
             Total Payable:{" "}
             <span className="text-teal-600 font-semibold">
               ₹{totalAmount.toFixed(2)}
@@ -122,7 +124,7 @@ const Payment = () => {
           </p>
           <button
             onClick={handlePayment}
-            className="w-full px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg text-sm sm:text-base transition duration-300"
+            className="w-full px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg text-base transition duration-300"
           >
             Pay with Razorpay
           </button>

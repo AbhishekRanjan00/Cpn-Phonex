@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import CrazyBackButton from '../components/CrazyBackBtn';
 import axios from 'axios';
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const UserDashboard = () => {
   const { auth, logout } = useAuth();
   const user = auth?.user;
@@ -13,7 +15,7 @@ const UserDashboard = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/api/orders/my-orders', {
+        const { data } = await axios.get(`${API_BASE}/orders/my-orders`, {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
           },

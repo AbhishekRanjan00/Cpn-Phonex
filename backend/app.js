@@ -4,49 +4,44 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
 
-
-
-const productRoutes = require('./routes/productRoutes');
-const userRoutes = require('./routes/userRoutes');
-const cartRoutes = require('./routes/cartRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const adminStatsRoutes = require('./routes/adminStatsRoutes');
-const contactRoutes = require('./routes/contactRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-
-// Load environment variables (except PORT)
-dotenv.config(); 
+dotenv.config();
 
 const app = express();
-   
-// Middleware 
- 
+
+// ✅ 1. CORS middleware (for APIs)
+app.use(cors({
+  origin: ['http://localhost:5000', 'https://cpnphonex.netlify.app'],
+  credentials: true,
+}));
+
+// ✅ 2. JSON and URL parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: 'http://localhost:5000',  // your frontend URL
-  credentials: true,           // if you need cookies/auth headers
-}));  
-app.use('/uploads', express.static('uploads'));
+
+// ✅ 3. Static image serving with proper CORS headers
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api/products', productRoutes);
-app.use('/api/users', userRoutes);
-app.use("/api/cart" , cartRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/admin/stats', adminStatsRoutes);
-app.use('/api/contact', contactRoutes);
-app.use("/api/payment", paymentRoutes);
 
+// ✅ 4. Routes
+app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/cart', require('./routes/cartRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/admin/stats', require('./routes/adminStatsRoutes'));
+app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/payment', require('./routes/paymentRoutes'));
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI) 
+// ✅ 5. Connect MongoDB
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
   .catch(err => console.error('❌ MongoDB error:', err));
- 
 
+// ✅ 6. Start server
 app.listen(3000, () => {
-    console.log("Server running on port 3000");
+  console.log("🚀 Server running on port 3000");
 });
-    

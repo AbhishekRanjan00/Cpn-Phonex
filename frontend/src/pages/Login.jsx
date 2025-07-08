@@ -6,6 +6,8 @@ import { useAuth } from '../context/AuthContext';
 import CrazyLoader from '../components/CrazyLoader';
 import toast from 'react-hot-toast';
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:3000/api/users/login', {
+      const res = await axios.post(`${API_BASE}/users/login`, {
         email,
         password,
       });

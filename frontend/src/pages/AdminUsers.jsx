@@ -5,13 +5,15 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import { FaUserShield, FaUser } from "react-icons/fa";
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 const AdminUsers = () => {
   const { auth } = useAuth();
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/admin/users", {
+      const res = await axios.get(`${API_BASE}/admin/users`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       setUsers(res.data);
@@ -24,7 +26,7 @@ const AdminUsers = () => {
     const newRole = currentRole === "admin" ? "user" : "admin";
     try {
       await axios.put(
-        `http://localhost:3000/api/admin/toggle-role/${id}`,
+        `${API_BASE}/admin/toggle-role/${id}`,
         { role: newRole },
         {
           headers: { Authorization: `Bearer ${auth.token}` },
